@@ -1,0 +1,73 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card {% if messages %}table-card{% endif %}">
+            <div class="card-header">
+                <h5>Ваши сообщения</h5>
+                <div class="card-header-right">
+                    <div class="btn-group card-option">
+                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="feather icon-more-horizontal"></i>
+                        </button>
+                        <ul class="list-unstyled card-option dropdown-menu dropdown-menu-right">
+                            <li class="dropdown-item full-card"><a href="#!"><span><i class="feather icon-maximize"></i> maximize</span><span style="display:none"><i class="feather icon-minimize"></i> Restore</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if messages %}
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Сообщение</th>
+                                            <th>Время отправки</th>
+                                            <th class="d-none d-sm-block">Удалить сообщение</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for message in messages %}
+                                            <tr>
+                                                <td class="col-xs-12">
+                                                    {{ message.text.title }} 
+                                                </td>     
+                                                <td class="col-xs-12">
+                                                    {{ message.schedule_time|date:"d M H:i" }}        
+                                                    <form method="POST" class="d-block d-sm-none">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="message_id" value="{{ message.id }}" />
+                                                        <input class="btn btn-danger has-ripple" type="submit" value="Удалить" />
+                                                    </form>                 
+                                                </td> 
+                                                <td class="col-xs-12 d-none d-sm-block">
+                                                    <form method="POST">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="message_id" value="{{ message.id }}" />
+                                                        <input class="btn btn-danger has-ripple" type="submit" value="Удалить" />
+                                                    </form>                       
+                                                </td> 
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <h5 class="card-title">Пока нет сообщений</h5>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
